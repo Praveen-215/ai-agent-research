@@ -2,13 +2,18 @@ from pydantic import BaseModel
 
 
 class Report(BaseModel):
-
     agent_name: str
 
     task_id: int
 
-    reported_status: str
+    task_title: str
 
-    progress_percent: int
+    actual_progress: int
+
+    reported_progress: int
+
+    status: str
 
     comments: str
+
+    truthful: bool

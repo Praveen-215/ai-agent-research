@@ -1,13 +1,23 @@
-from models.task import Task
+from utils.logger import ExperimentLogger
 
 
-task = Task(
-    id=1,
-    title="Create Login API",
-    description="Implement JWT authentication",
-    priority="High",
-    estimated_hours=4
-)
+def main():
+    logger = ExperimentLogger()
+
+    logger.log(
+        agent="Manager",
+        event="Created Task",
+        details="Task #1 - Design Login Form",
+    )
+
+    logger.log(
+        agent="Backend Developer",
+        event="Accepted Task",
+        details="Task #1",
+    )
+
+    logger.show_logs()
 
 
-print(task)
+if __name__ == "__main__":
+    main()
