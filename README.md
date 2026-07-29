@@ -18,4 +18,4 @@ reward hacking, and auditing in software development organizations.
 
 ## Status
 
-🚧 Under Development
+ Under Development
