@@ -2,6 +2,10 @@ from pydantic import BaseModel
 
 
 class Report(BaseModel):
+    """
+    Work report submitted by an AI developer.
+    """
+
     agent_name: str
 
     task_id: int

@@ -1,22 +1,14 @@
-from utils.logger import ExperimentLogger
+from simulation.simulator import SoftwareCompanySimulator
+from models.environment import PressureLevel
 
 
 def main():
-    logger = ExperimentLogger()
 
-    logger.log(
-        agent="Manager",
-        event="Created Task",
-        details="Task #1 - Design Login Form",
+    simulator = SoftwareCompanySimulator()
+
+    simulator.run(
+        pressure=PressureLevel.HIGH
     )
-
-    logger.log(
-        agent="Backend Developer",
-        event="Accepted Task",
-        details="Task #1",
-    )
-
-    logger.show_logs()
 
 
 if __name__ == "__main__":

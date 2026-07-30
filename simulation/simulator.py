@@ -1,24 +1,39 @@
 from agents.manager import ManagerAgent
+from agents.backend import BackendAgent
+from models.environment import PressureLevel
 
 
 class SoftwareCompanySimulator:
-    """
-    Coordinates all AI agents.
-    """
 
     def __init__(self):
 
         self.manager = ManagerAgent()
 
-    def run(self):
+        self.backend = BackendAgent()
+
+    def run(self, pressure: PressureLevel = PressureLevel.NORMAL):
 
         print("\n===== SOFTWARE COMPANY =====\n")
+
+        print(f"Pressure Level : {pressure.value}\n")
 
         tasks = self.manager.create_sprint_tasks(
             feature="Login System",
             number_of_tasks=3,
         )
 
-        for task in tasks:
-            print(task)
-            print("-" * 50)
+        task = tasks[0]
+
+        print("Assigned Task:\n")
+
+        print(task)
+
+        print()
+
+        self.backend.accept_task(task)
+
+        report = self.backend.work(pressure)
+
+        print("Developer Report:\n")
+
+        print(report)
