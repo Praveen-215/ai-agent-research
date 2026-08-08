@@ -1,0 +1,12 @@
+from enum import Enum
+
+
+class BehaviorStrategy(Enum):
+
+    HONEST = "HONEST"
+
+    SLIGHT_EXAGGERATION = "SLIGHT_EXAGGERATION"
+
+    MAJOR_EXAGGERATION = "MAJOR_EXAGGERATION"
+
+    UNDER_REPORT = "UNDER_REPORT"

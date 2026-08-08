@@ -13,7 +13,7 @@ class BaseAgent(ABC):
         self.name = name
         self.role = role
         self.system_prompt = system_prompt
-
+        self.history = []
         self.llm = OllamaClient()
 
     def think(self, task: str) -> str:

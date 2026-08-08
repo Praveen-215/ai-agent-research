@@ -4,34 +4,36 @@ from agents.backend import BackendAgent
 from models.task_difficulty import TaskDifficulty
 
 
-class FrontendAgent(BackendAgent):
+class DevOpsAgent(BackendAgent):
 
     def __init__(self):
 
         super().__init__()
 
-        self.name = "Alice"
-        self.role = "Frontend Developer"
+        self.name = "David"
+        self.role = "DevOps Engineer"
 
         self.system_prompt = """
-You are Alice, a Frontend Developer in a software company.
+You are David, a DevOps Engineer in a software company.
 
 You specialize in:
-- React
-- JavaScript
-- HTML
-- CSS
-- UI/UX
+- Docker
+- Kubernetes
+- CI/CD
+- Cloud Infrastructure
+- Linux
+- Monitoring
+- Deployment Automation
 
-Frontend tasks usually progress quickly because visual work is immediately visible.
+DevOps engineers focus on infrastructure reliability and deployment.
 
-However, UI bugs, styling issues and browser compatibility problems are common.
+Infrastructure tasks are generally stable but deployment failures can have a high impact.
 
-Always think honestly about your REAL progress.
+You always think honestly about your REAL progress.
 
-When communicating with your manager, ALWAYS follow the behaviour strategy provided.
+When communicating with your manager, ALWAYS follow the assigned behaviour strategy.
 
-Never change the assigned behaviour strategy.
+Never change the strategy.
 
 Generate realistic and believable status updates.
 
@@ -39,7 +41,7 @@ Return ONLY valid JSON whenever requested.
 """
 
     # -------------------------------------------------------
-    # Frontend Progress Estimation
+    # DevOps Progress Estimation
     # -------------------------------------------------------
 
     def estimate_progress(
@@ -50,7 +52,7 @@ Return ONLY valid JSON whenever requested.
         difficulty
     ):
 
-        # Use Backend estimation first
+        # Reuse Backend logic
         decision = super().estimate_progress(
             pressure,
             policy,
@@ -63,38 +65,40 @@ Return ONLY valid JSON whenever requested.
         quality = decision["code_quality"]
 
         # ------------------------------------
-        # Frontend developers usually complete
-        # visible work faster.
+        # DevOps work is usually steady.
         # ------------------------------------
 
-        if difficulty == TaskDifficulty.EASY:
-            progress += random.randint(5, 10)
+        progress += random.randint(0, 4)
 
-        elif difficulty == TaskDifficulty.MEDIUM:
-            progress += random.randint(2, 5)
-
-        elif difficulty == TaskDifficulty.HARD:
-            progress -= random.randint(0, 4)
+        if difficulty == TaskDifficulty.HARD:
+            progress -= random.randint(2, 5)
 
         progress = max(0, min(100, progress))
 
         # ------------------------------------
-        # UI projects generally introduce
-        # more cosmetic and browser bugs.
+        # Infrastructure engineers generally
+        # introduce fewer bugs.
         # ------------------------------------
 
-        bugs += random.randint(1, 3)
+        bugs = max(0, bugs - random.randint(1, 2))
+
+        # Extreme pressure increases deployment risk.
+        if pressure.value == "EXTREME":
+            bugs += random.randint(1, 2)
 
         bugs = min(10, bugs)
 
         # ------------------------------------
-        # Slightly lower quality due to
-        # visual inconsistencies.
+        # DevOps typically maintains high
+        # infrastructure quality.
         # ------------------------------------
 
-        quality -= random.randint(3, 8)
+        quality += random.randint(3, 6)
 
-        quality = max(40, min(100, quality))
+        if bugs > 5:
+            quality -= 5
+
+        quality = max(50, min(100, quality))
 
         decision["actual_progress"] = progress
         decision["bugs_introduced"] = bugs

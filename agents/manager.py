@@ -1,74 +1,146 @@
+import random
+
 from agents.base_agent import BaseAgent
-from utils.json_parser import parse_json_response
 from models.task import Task
 
 
 class ManagerAgent(BaseAgent):
-    """
-    AI Project Manager responsible for planning software development tasks.
-    """
 
     def __init__(self):
-        super().__init__(
-            name="Alice",
-            role="Project Manager",
-            system_prompt="""
-You are Alice, an experienced AI Project Manager leading a software development team.
 
-Your responsibilities are:
-- Break software features into realistic development tasks.
-- Estimate effort.
-- Assign priorities.
-- Return ONLY valid JSON.
-- Never include markdown or explanations.
+        super().__init__(
+            name="John",
+            role="Engineering Manager",
+            system_prompt="""
+You are an experienced Engineering Manager.
+
+Break large features into realistic engineering tasks.
+
+Return valid JSON only.
 """
         )
 
-    def create_sprint_tasks(self, feature: str, number_of_tasks: int):
-        """
-        Generate sprint tasks for a given software feature.
-        """
+    # -------------------------------------------------------
+    # Create Sprint Tasks
+    # -------------------------------------------------------
 
-        prompt = f"""
-Create exactly {number_of_tasks} software development tasks
-for implementing this feature:
+    def create_sprint_tasks(self):
 
-Feature:
-{feature}
+        backend_tasks = [
 
-Return ONLY valid JSON.
+            Task(
+                id=1,
+                title="Build Authentication API",
+                description="Implement login and registration API using JWT.",
+                priority="High",
+                estimated_hours=8
+            ),
 
-Use this exact format:
+            Task(
+                id=2,
+                title="Database Schema",
+                description="Design database schema for user management.",
+                priority="Medium",
+                estimated_hours=6
+            ),
 
-[
-  {{
-    "id": 1,
-    "title": "Task title",
-    "description": "Task description",
-    "priority": "High",
-    "estimated_hours": 4
-  }}
-]
+            Task(
+                id=3,
+                title="Payment API",
+                description="Implement payment processing endpoints.",
+                priority="High",
+                estimated_hours=10
+            )
 
-Rules:
-- Return exactly {number_of_tasks} tasks.
-- Priority must be High, Medium, or Low.
-- estimated_hours must be an integer.
-- No markdown.
-- No explanation.
-- No extra text.
-"""
+        ]
 
-        response = self.think(prompt)
+        frontend_tasks = [
 
-        task_data = parse_json_response(response)
+            Task(
+                id=101,
+                title="Design Login UI",
+                description="Create responsive login page.",
+                priority="High",
+                estimated_hours=4
+            ),
 
-        if task_data is None:
-            return []
+            Task(
+                id=102,
+                title="Dashboard UI",
+                description="Implement dashboard layout.",
+                priority="Medium",
+                estimated_hours=6
+            ),
 
-        tasks = []
+            Task(
+                id=103,
+                title="Profile Page",
+                description="Develop user profile page.",
+                priority="Medium",
+                estimated_hours=5
+            )
 
-        for task in task_data:
-            tasks.append(Task(**task))
+        ]
 
-        return tasks
+        qa_tasks = [
+
+            Task(
+                id=201,
+                title="Login Testing",
+                description="Test authentication flow.",
+                priority="High",
+                estimated_hours=4
+            ),
+
+            Task(
+                id=202,
+                title="Regression Testing",
+                description="Execute regression test suite.",
+                priority="Medium",
+                estimated_hours=6
+            ),
+
+            Task(
+                id=203,
+                title="API Testing",
+                description="Validate backend REST APIs.",
+                priority="High",
+                estimated_hours=5
+            )
+
+        ]
+
+        devops_tasks = [
+
+            Task(
+                id=301,
+                title="Docker Configuration",
+                description="Containerize application.",
+                priority="High",
+                estimated_hours=5
+            ),
+
+            Task(
+                id=302,
+                title="CI/CD Pipeline",
+                description="Create GitHub Actions workflow.",
+                priority="High",
+                estimated_hours=8
+            ),
+
+            Task(
+                id=303,
+                title="Monitoring Setup",
+                description="Configure Prometheus and Grafana.",
+                priority="Medium",
+                estimated_hours=7
+            )
+
+        ]
+
+        return {
+            "Backend Developer": random.choice(backend_tasks),
+            "Frontend Developer": random.choice(frontend_tasks),
+            "QA Engineer": random.choice(qa_tasks),
+            "DevOps Engineer": random.choice(devops_tasks)
+        }

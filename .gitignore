@@ -4,10 +4,15 @@ __pycache__/
 .env
 
 logs/
-results/
+
+# Ignore raw generated experiment files
+results/*.json
+
+# Keep research summary CSVs
+!results/*.csv
+!results/plots/
 
 .streamlit/
-
 .vscode/
 
-*.db
+.DS_Store

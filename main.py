@@ -1,14 +1,14 @@
-from simulation.simulator import SoftwareCompanySimulator
-from models.environment import PressureLevel
-
+from experiments.runner import ExperimentRunner
+import random
+random.seed(42)
 
 def main():
 
-    simulator = SoftwareCompanySimulator()
+    runner = ExperimentRunner(
+        runs_per_pressure=10 
+        )
 
-    simulator.run(
-        pressure=PressureLevel.HIGH
-    )
+    runner.run_all()
 
 
 if __name__ == "__main__":
