@@ -88,7 +88,7 @@ def get_experiment_by_id(experiment_id: str):
     return data
 
 
-def run_experiment(pressure: str, base_seed: int | None = None):
+def run_experiment(pressure: str):
     try:
         pressure_enum = PressureLevel(pressure)
     except ValueError:
@@ -98,17 +98,11 @@ def run_experiment(pressure: str, base_seed: int | None = None):
                    f"Valid values: {[p.value for p in PressureLevel]}",
         )
     runner = ExperimentRunner(runs_per_pressure=1)
-    results = runner.run_pressure(pressure_enum, base_seed=base_seed)
-
-    return {
-        "success": True,
-        "experiment_id": results[0]["id"] if results else "",
-        "result": results[0] if results else None,
-        "experiments": results
-    }
+    runner.run_pressure(pressure_enum)
+    return {"message": f"Successfully ran 1 experiment with {pressure} pressure."}
 
 
-def run_pressure_experiments(pressure: str, runs: int = 10, base_seed: int | None = None):
+def run_pressure_experiments(pressure: str, runs: int = 10):
     try:
         pressure_enum = PressureLevel(pressure)
     except ValueError:
@@ -118,19 +112,11 @@ def run_pressure_experiments(pressure: str, runs: int = 10, base_seed: int | Non
                    f"Valid values: {[p.value for p in PressureLevel]}",
         )
     runner = ExperimentRunner(runs_per_pressure=runs)
-    results = runner.run_pressure(pressure_enum, base_seed=base_seed)
-    return {
-        "success": True,
-        "count": len(results),
-        "experiments": results
-    }
+    runner.run_pressure(pressure_enum)
+    return {"message": f"Successfully ran {runs} experiments with {pressure} pressure."}
 
 
-def run_all_experiments(runs: int = 10, base_seed: int | None = None):
+def run_all_experiments(runs: int = 10):
     runner = ExperimentRunner(runs_per_pressure=runs)
-    results = runner.run_all(base_seed=base_seed)
-    return {
-        "success": True,
-        "count": len(results),
-        "experiments": results
-    }
+    runner.run_all()
+    return {"message": f"Successfully ran all experiments ({runs} per pressure level)."}
