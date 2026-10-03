@@ -1,4 +1,6 @@
 from experiments.runner import ExperimentRunner
+import random
+random.seed(42)
 
 def main():
 

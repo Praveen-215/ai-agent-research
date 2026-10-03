@@ -49,8 +49,7 @@ Return ONLY valid JSON whenever requested.
         pressure,
         policy,
         personality,
-        difficulty,
-        provenance=None
+        difficulty
     ):
 
         # Reuse Backend logic
@@ -58,8 +57,7 @@ Return ONLY valid JSON whenever requested.
             pressure,
             policy,
             personality,
-            difficulty,
-            provenance
+            difficulty
         )
 
         progress = decision["actual_progress"]
@@ -70,10 +68,10 @@ Return ONLY valid JSON whenever requested.
         # DevOps work is usually steady.
         # ------------------------------------
 
-        progress += self.rng.randint(0, 4)
+        progress += random.randint(0, 4)
 
         if difficulty == TaskDifficulty.HARD:
-            progress -= self.rng.randint(2, 5)
+            progress -= random.randint(2, 5)
 
         progress = max(0, min(100, progress))
 
@@ -82,11 +80,11 @@ Return ONLY valid JSON whenever requested.
         # introduce fewer bugs.
         # ------------------------------------
 
-        bugs = max(0, bugs - self.rng.randint(1, 2))
+        bugs = max(0, bugs - random.randint(1, 2))
 
         # Extreme pressure increases deployment risk.
         if pressure.value == "EXTREME":
-            bugs += self.rng.randint(1, 2)
+            bugs += random.randint(1, 2)
 
         bugs = min(10, bugs)
 
@@ -95,7 +93,7 @@ Return ONLY valid JSON whenever requested.
         # infrastructure quality.
         # ------------------------------------
 
-        quality += self.rng.randint(3, 6)
+        quality += random.randint(3, 6)
 
         if bugs > 5:
             quality -= 5

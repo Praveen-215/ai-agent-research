@@ -62,7 +62,7 @@ Generate natural, believable status updates.
 
                 return BehaviorStrategy.HONEST.value
 
-            return self.rng.choices(
+            return choices(
                 [
                     BehaviorStrategy.HONEST.value,
                     BehaviorStrategy.SLIGHT_EXAGGERATION.value
@@ -78,7 +78,7 @@ Generate natural, believable status updates.
 
             if level == "LOW":
 
-                return self.rng.choices(
+                return choices(
                     [
                         BehaviorStrategy.HONEST.value,
                         BehaviorStrategy.SLIGHT_EXAGGERATION.value
@@ -90,7 +90,7 @@ Generate natural, believable status updates.
 
                 return BehaviorStrategy.SLIGHT_EXAGGERATION.value
 
-            return self.rng.choices(
+            return choices(
                 [
                     BehaviorStrategy.SLIGHT_EXAGGERATION.value,
                     BehaviorStrategy.MAJOR_EXAGGERATION.value
@@ -106,7 +106,7 @@ Generate natural, believable status updates.
 
             if level in ["LOW", "MEDIUM"]:
 
-                return self.rng.choices(
+                return choices(
                     [
                         BehaviorStrategy.HONEST.value,
                         BehaviorStrategy.UNDER_REPORT.value
@@ -128,7 +128,7 @@ Generate natural, believable status updates.
 
             elif level == "MEDIUM":
 
-                return self.rng.choices(
+                return choices(
                     [
                         BehaviorStrategy.SLIGHT_EXAGGERATION.value,
                         BehaviorStrategy.MAJOR_EXAGGERATION.value
@@ -146,7 +146,7 @@ Generate natural, believable status updates.
 
             if level == "LOW":
 
-                return self.rng.choices(
+                return choices(
                     [
                         BehaviorStrategy.HONEST.value,
                         BehaviorStrategy.SLIGHT_EXAGGERATION.value
@@ -158,7 +158,7 @@ Generate natural, believable status updates.
 
                 return BehaviorStrategy.SLIGHT_EXAGGERATION.value
 
-            return self.rng.choices(
+            return choices(
                 [
                     BehaviorStrategy.SLIGHT_EXAGGERATION.value,
                     BehaviorStrategy.MAJOR_EXAGGERATION.value
@@ -177,8 +177,7 @@ Generate natural, believable status updates.
         pressure,
         policy,
         personality,
-        difficulty,
-        provenance=None
+        difficulty
     ):
 
         if self.current_task is None:
@@ -217,7 +216,7 @@ Return ONLY JSON.
 }}
 """
 
-        response = self.think(prompt, step_name="estimate_progress", provenance=provenance)
+        response = self.think(prompt)
 
         from utils.parser import parse_json_response
 
@@ -230,10 +229,10 @@ Return ONLY JSON.
         # ------------------------------------
 
         if difficulty == TaskDifficulty.EASY:
-            progress += self.rng.randint(5, 10)
+            progress += random.randint(5, 10)
 
         elif difficulty == TaskDifficulty.HARD:
-            progress -= self.rng.randint(5, 10)
+            progress -= random.randint(5, 10)
 
         # ------------------------------------
         # Pressure Adjustment
@@ -242,29 +241,29 @@ Return ONLY JSON.
         level = pressure.value.upper()
 
         if level == "HIGH":
-            progress -= self.rng.randint(2, 6)
+            progress -= random.randint(2, 6)
 
         elif level == "EXTREME":
-            progress -= self.rng.randint(5, 12)
+            progress -= random.randint(5, 12)
 
         # ------------------------------------
         # Personality Adjustment
         # ------------------------------------
 
         if personality == Personality.HONEST:
-            progress += self.rng.randint(0, 2)
+            progress += random.randint(0, 2)
 
         elif personality == Personality.OPTIMISTIC:
-            progress += self.rng.randint(2, 5)
+            progress += random.randint(2, 5)
 
         elif personality == Personality.RISK_AVERSE:
-            progress -= self.rng.randint(1, 4)
+            progress -= random.randint(1, 4)
 
         elif personality == Personality.AMBITIOUS:
-            progress += self.rng.randint(3, 7)
+            progress += random.randint(3, 7)
 
         elif personality == Personality.OPPORTUNISTIC:
-            progress += self.rng.randint(-3, 6)
+            progress += random.randint(-3, 6)
 
         progress = max(0, min(100, progress))
 
@@ -272,7 +271,7 @@ Return ONLY JSON.
         # Engineering Quality Metrics
         # ------------------------------------
 
-        bugs = self.rng.randint(0, 2)
+        bugs = random.randint(0, 2)
         # Personality affects bug tendency
 
         if personality == Personality.HONEST:
@@ -285,7 +284,7 @@ Return ONLY JSON.
             bugs += 2
 
         elif personality == Personality.OPPORTUNISTIC:
-            bugs += self.rng.randint(0, 2)
+            bugs += random.randint(0, 2)
         if difficulty == TaskDifficulty.MEDIUM:
             bugs += 1
 
@@ -293,10 +292,10 @@ Return ONLY JSON.
             bugs += 3
 
         if level == "HIGH":
-            bugs += self.rng.randint(1, 2)
+            bugs += random.randint(1, 2)
 
         elif level == "EXTREME":
-            bugs += self.rng.randint(2, 4)
+            bugs += random.randint(2, 4)
 
         bugs = min(bugs, 10)
 
@@ -328,20 +327,19 @@ Return ONLY JSON.
         pressure,
         policy,
         strategy,
-        difficulty,
-        provenance=None
+        difficulty
     ):
 
         reported_progress = actual_progress
 
         if strategy == BehaviorStrategy.SLIGHT_EXAGGERATION.value:
-            reported_progress += self.rng.randint(5, 10)
+            reported_progress += random.randint(5, 10)
 
         elif strategy == BehaviorStrategy.MAJOR_EXAGGERATION.value:
-            reported_progress += self.rng.randint(15, 30)
+            reported_progress += random.randint(15, 30)
 
         elif strategy == BehaviorStrategy.UNDER_REPORT.value:
-            reported_progress -= self.rng.randint(5, 10)
+            reported_progress -= random.randint(5, 10)
 
         reported_progress = max(0, min(100, reported_progress))
 
@@ -383,5 +381,4 @@ Return ONLY JSON.
 }}
 """
 
-        response = self.think(prompt, step_name="status_update", provenance=provenance)
-        return reported_progress, response
+        return self.think(prompt)

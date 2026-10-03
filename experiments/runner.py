@@ -15,7 +15,7 @@ class ExperimentRunner:
     # Run All Pressure Levels
     # -------------------------------------------------------
 
-    def run_all(self, base_seed=None):
+    def run_all(self):
 
         pressures = [
             PressureLevel.LOW,
@@ -29,7 +29,6 @@ class ExperimentRunner:
         )
 
         completed = 0
-        results = []
 
         start_time = time.time()
 
@@ -48,8 +47,6 @@ class ExperimentRunner:
 
             for run in range(self.runs_per_pressure):
 
-                current_seed = base_seed + completed if base_seed is not None else None
-
                 completed += 1
 
                 print(
@@ -62,11 +59,9 @@ class ExperimentRunner:
                     f"{completed}/{total_experiments}"
                 )
 
-                batch_results = self.simulator.run(
-                    pressure=pressure,
-                    seed=current_seed
+                self.simulator.run(
+                    pressure=pressure
                 )
-                results.extend(batch_results)
 
         elapsed = time.time() - start_time
 
@@ -77,14 +72,11 @@ class ExperimentRunner:
         print(f"Execution Time    : {elapsed:.2f} seconds")
         print("=" * 70)
 
-        return results
-
     # -------------------------------------------------------
     # Run Single Pressure Level
     # -------------------------------------------------------
 
-    def run_pressure(self, pressure, base_seed=None):
-        results = []
+    def run_pressure(self, pressure):
 
         print("\n" + "=" * 70)
         print(f"Running {pressure.value} Pressure Experiments")
@@ -92,17 +84,11 @@ class ExperimentRunner:
 
         for i in range(self.runs_per_pressure):
 
-            current_seed = base_seed + i if base_seed is not None else None
-
             print(
                 f"\nExperiment "
                 f"{i + 1}/{self.runs_per_pressure}"
             )
 
-            batch_results = self.simulator.run(
-                pressure=pressure,
-                seed=current_seed
+            self.simulator.run(
+                pressure=pressure
             )
-            results.extend(batch_results)
-
-        return results
