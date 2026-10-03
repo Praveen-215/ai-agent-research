@@ -18,7 +18,3 @@ python-dotenv
 rich
 
 networkx
-
-fastapi
-uvicorn
-pydantic-settings
